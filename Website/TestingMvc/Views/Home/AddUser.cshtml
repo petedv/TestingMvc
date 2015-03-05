@@ -1,0 +1,63 @@
+﻿@model TestingMvc.UserVM
+
+<div class ="row">
+	<div class ="large-12 columns">
+		<h3>Add User</h3>
+	</div>
+</div>
+
+@using(Html.BeginForm("AddUser", "Home", FormMethod.Post))
+{
+	<div class="panel">
+		<div class="row">
+			<div class="large-5 large-centered columns end">
+				@Html.LabelFor(m => m.Username)
+				@Html.TextBoxFor(m => m.Username)
+				@Html.ValidationMessageFor(m => m.Username, null, new { @class="error" })
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="large-5 large-centered columns end">
+				@Html.LabelFor(m => m.NewPassword)
+				@Html.PasswordFor(m => m.NewPassword)
+				@Html.ValidationMessageFor(m => m.NewPassword, null, new { @class="error" })
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="large-5 large-centered columns end">
+				@Html.LabelFor(m => m.NewPasswordAgain)
+				@Html.PasswordFor(m => m.NewPasswordAgain)
+				@Html.ValidationMessageFor(m => m.NewPasswordAgain, null, new { @class="error" })
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="large-5 large-centered columns end">
+				@Html.LabelFor(m => m.Email)
+				@Html.TextBoxFor(m => m.Email)
+				@Html.ValidationMessageFor(m => m.Email, null, new { @class="error" })
+			</div>
+		</div>
+
+		@* Roles *@
+		<div class="row">
+			<div class="large-5 large-centered columns end">
+				<label for="UserRoles">Roles</label>
+				<div class="panel">
+					@foreach (var r in Model.RoleOptions)
+					{
+						<input type="checkbox" value="@r" name="UserRoles" /> @r <br />
+					}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="large-5 large-centered columns end">
+				<input type="submit" value="Add User" class="button right" />
+			</div>
+		</div>
+	</div> @* End Panel *@
+}

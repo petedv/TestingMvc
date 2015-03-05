@@ -1,0 +1,52 @@
+﻿@using TestingMvc
+@model TestCaseSearchVM
+
+@{
+	var filterUrl = Url.Action("FilterTestCases", "TestCase");
+	var searchUrl = Url.Action("FindTestCases", "TestCase");
+}
+
+
+@using (@Html.BeginForm("FindTestCases", "TestCase", FormMethod.Get, new { 
+	id="filterform", 
+	data_filter=@filterUrl.ToString(), 
+	data_search=@searchUrl.ToString() 
+})) {
+	<div class="row">
+	    <div class="panel">
+	        <fieldset>
+	            <legend>Test Case Search Filters</legend>
+	            <div class="row">
+	                <div class="large-3 columns">
+	                    <label>Product
+	                        @Html.DropDownListFor(m => m.ProductID, Model.ProductOptions, "Select", new { id="db_products" })
+	                    </label>
+	                </div>
+	                <div class="large-3 columns">
+	                    <label>Functional Area
+	                        @Html.DropDownListFor(m => m.AreaID, Model.AreaOptions, "All", new { id="db_areas" })
+	                    </label>
+	                </div>
+	                <div class="large-3 columns">
+	                    <label>Config
+	                        @Html.DropDownListFor(m => m.ConfigID, Model.ConfigOptions, "All", new { id="db_config" })
+	                    </label>
+	                </div>
+	                <div class="large-3 columns">
+	                    <div class="row collapse">
+	                        <div class="large-12 columns">
+	                            <label>Test ID Search</label>
+	                        </div>
+	                    </div>
+	                    <div class="row collapse">
+	                        <div class="large-12 columns">
+	                        	@Html.TextBoxFor(m => m.TestIdSearch, new { id="searchterm" })
+	                            <a id="btn_search" class="button small right" href="#">Search</a>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </fieldset>
+	    </div>
+	</div>
+}

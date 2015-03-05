@@ -1,0 +1,69 @@
+﻿@model TestingMvc.CompleteRunVM
+<div class="row">
+    <div class="large-12 columns">
+        <h3>Complete Test Run</h3>
+    </div>
+</div>
+
+@using (@Html.BeginForm("CompleteRun", "TestRun", FormMethod.Post, new { id="testcase_filter_form" }))
+{
+    @Html.HiddenFor(m => m.TestRunID)
+
+	<div class="row">
+		<div class="panel">
+			<fieldset>
+				<legend>Test Case Search Filters</legend>
+				<div class="row">
+					<div class="large-4 end columns">
+						<label>Functional Area
+							@Html.DropDownListFor(m => m.AreaFilterID, Model.AreaFilterOptions, "All", new { id="area_filter" })
+						</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+}
+
+<table id="testcasetable">
+	<caption>Test Cases</caption>
+	<thead>
+		<tr>
+			<th>Test ID</th>
+			<th>Title</th>
+			<th>Preconditions</th>
+			<th>Test Steps /  Inputs</th>
+			<th>Expected Outcome</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var tc in Model.TestCases)
+		{
+		<tr>
+			<td>@tc.TestCaseCode</td>
+			<td>@tc.Title</td>
+			<td>@tc.Preconditions</td>
+			<td>@tc.Steps</td>
+			<td>@tc.Expected</td>
+			<td>
+			@Html.ActionLink(
+				"Run Case", 
+				"CompleteTest", 
+				new {
+					TestCaseID=tc.TestCaseID,
+					TestRunID=Model.TestRunID
+				}, 
+				new {
+					@class="button small right"
+				})
+			</td>
+		</tr>
+		}
+	</tbody>
+</table>
+
+@section scripts
+{
+	@Scripts.Render("~/Scripts/Views/completerun.js")
+}

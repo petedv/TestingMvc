@@ -1,0 +1,134 @@
+﻿@model TestingMvc.TestCaseVM
+
+@using (@Html.BeginForm((string)ViewBag.FormAction, (string)ViewBag.FormController, FormMethod.Post, new { id="addTestForm" }))
+{	
+	<div class="row">
+		<div class="small-12 columns">
+			<h3>@ViewBag.Title</h3>
+		</div>
+	</div>
+
+	@Html.HiddenFor(m => m.TestCaseID)
+
+	<div class="row">
+		<div class="panel">
+			<div class="row" data-equalizer>
+
+				<div class="small-12 large-6 columns" data-equalizer-watch>
+					<fieldset data-equalizer-watch>
+						<legend>Project Details</legend>
+						<div class="row collapse">
+							<div class="small-12 columns">
+								<label>Product
+									@Html.DropDownListFor(m => m.ProductID, Model.Products, "Select", new { id="ProductID" }) 
+									@Html.ValidationMessageFor(m => m.ProductID, null, new { @class="error" })
+								</label>
+							</div>
+						</div>
+						<div class="row collapse">
+							<div class="small-12 columns">
+								<label>Functional Area
+									@Html.DropDownListFor(m => m.AreaID, Model.Areas, "Select") 
+									@Html.ValidationMessageFor(m => m.AreaID, null, new { @class="error" })
+								</label>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="small-12 large-6 columns" data-equalizer-watch>
+					<fieldset data-equalizer-watch>
+						<legend>Test Identification</legend>
+						<div class="row">
+							<div class="small-5 columns">
+								<label>Test ID
+									@Html.TextBoxFor(m => m.TestCaseCode)
+									@Html.ValidationMessageFor(m => m.TestCaseCode, null, new { @class="error" })
+								</label>
+							</div>
+							<div class="small-5 columns">
+								<label>Customer Requirement
+									@Html.TextBoxFor(m => m.Requirement)
+									@Html.ValidationMessageFor(m => m.Requirement, null, new { @class="error" })
+								</label>
+							</div>
+							<div class="small-2 columns">
+								<label>Priority
+									@Html.DropDownListFor(m => m.Priority, Model.Priorities) 
+									@Html.ValidationMessageFor(m => m.Priority, null, new { @class="error" })
+								</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="small-12 columns">
+								<label>Test Title
+									@Html.TextBoxFor(m => m.Title)
+									@Html.ValidationMessageFor(m => m.Title, null, new { @class="error" })
+								</label>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+
+			<fieldset>
+				<legend>Test Details</legend>
+				<div class="row">
+					<div class="small-6 columns">
+						<label>
+							Test Steps / Inputs
+							@Html.TextAreaFor(m => m.Steps, new { rows="6" })
+							@Html.ValidationMessageFor(m => m.Steps, null, new { @class="error" })
+						</label>
+					</div>
+
+					<div class="small-6 columns">
+						<label>
+							Preconditions
+							@Html.TextBoxFor(m => m.Preconditions)
+							@Html.ValidationMessageFor(m => m.Preconditions, null, new { @class="error" })
+						</label>
+						<label>
+							Expected Outcome
+							@Html.TextAreaFor(m => m.ExpectedOutcome, new { rows="2" })
+							@Html.ValidationMessageFor(m => m.ExpectedOutcome, null, new { @class="error" })
+						</label>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset id="configfield">
+				<legend>Configurations</legend>
+				@Html.ValidationMessageFor(m => m.SelectedConfigs, null, new { @class="error" })
+				<div class="row">
+					<div class ="small-12 columns">
+						<table>
+							<tr>
+								<th>Valid</th>
+								<th>Config Name</th>
+							</tr>
+							@foreach (database.Config c in Model.Configs)
+							{
+								<tr>
+								@if (Model.SelectedConfigs != null && Model.SelectedConfigs.Contains(c.ConfigID))
+								{
+									<td><input name="SelectedConfigs" value="@c.ConfigID" type="checkbox" checked="checked" /></td>
+								} else {
+									<td><input name="SelectedConfigs" value="@c.ConfigID" type="checkbox" /></td>
+								}
+									<td>@c.Name</td>
+								</tr>
+							}
+						</table>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="row">
+				<div class="small-12 columns">
+					<input type="submit" value="@ViewBag.Button" class="button small right" />
+				</div>
+			</div>
+		</div>
+	</div>
+}

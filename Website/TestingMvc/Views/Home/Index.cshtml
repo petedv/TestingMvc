@@ -1,0 +1,161 @@
+﻿@model TestingMvc.HomeVM
+@using TestingMvc
+@{
+    ViewBag.Title = "Test Website";
+}
+
+@*  dashboard area   *@
+<div id="dashboard" class="row">
+	<div class="row">
+		@* Login, Logout and Previous test runs column *@
+		<div class ="large-4 small-12 columns">
+
+			@* Login Panel *@
+			<div class="panel callout radius" id="loginpanel">
+				@if (!String.IsNullOrWhiteSpace(User.Identity.Name))
+				{
+					using (Html.BeginForm("Logout", "Home", FormMethod.Post))
+					{
+						<div class="row">
+							<div class ="small-8 columns">
+								<h4>@User.Identity.Name</h4>
+							</div>
+							<div class="small-4 columns">
+								<input type="submit" class="button right" value="Logout" />
+							</div>
+						</div>
+					}
+				}
+				else
+				{
+					using (Html.BeginForm("Login", "Home", FormMethod.Post))
+					{
+						<div class="row">
+							<div class ="large-12 small-12 columns">
+								<h4 id="logintitle">Login</h4>
+							</div>
+						</div>
+						<div id="loginfields" class="row">
+
+							<div class="small-12 columns">
+								@Html.LabelFor(m => m.LoginInfo.Username)
+								@Html.TextBoxFor(m => m.LoginInfo.Username)
+								@Html.ValidationMessageFor(m => m.LoginInfo.Username)
+							</div>
+							<div class="small-12 columns">
+								@Html.LabelFor(m => m.LoginInfo.Password)
+								@Html.PasswordFor(m => m.LoginInfo.Password)
+								@Html.ValidationMessageFor(m => m.LoginInfo.Password)
+							</div>
+						</div>
+						<div class="row" id="loginbutton">
+							<div class="small-12 columns">
+								<input type="submit" class="button right" value="Login" />
+							</div>
+						</div>
+					}
+				}
+			</div>
+
+		</div> @* end large-4 small-12 columns *@
+
+		@* Newest Test Cases Panel *@
+		<div class="large-8 small-12 columns" id="newesttestcases">
+			<div class="panel callout radius">
+				<h4>Newest Test Cases</h4>
+				<div class="row">
+					<div class="small-2 columns"> 
+						<strong>Product</strong>
+					</div>
+					<div class="small-2 columns">
+						<strong>Test ID</strong>
+					</div>
+					<div class="small-8 columns">
+						<strong>Test Title</strong>
+					</div>
+				</div>
+				@foreach (var tc in Model.NewestTestCases)
+				{
+				<div class="row">
+					<div class="small-2 columns"> 
+						@tc.Product.Name
+					</div>
+					<div class="small-2 columns">
+						@tc.TestCaseCode
+					</div>
+					<div class="small-8 columns">
+						@tc.Title
+					</div>
+				</div>
+				}
+			</div>
+		</div>
+	</div>
+
+	@* Previous test runs and Latest Runs Row *@
+	<div class="row">
+		@* Previous Test Runs Panel *@
+		<div class ="large-4 small-12 columns">
+			<div class="panel callout radius" id="previoustestruns">
+				<h4>Previous Test Run</h4>
+				<div class="row">
+					<div class="small-6 columns">
+						<strong>Product</strong>
+					</div>
+					<div class="small-6 columns">
+						<strong>Since Last Run</strong>
+					</div>
+				</div>
+				@foreach (var prevRun in Model.PreviousRuns)
+				{
+				<div class="row">
+					<div class="small-6 columns">
+						@prevRun.Item1.Name
+					</div>
+					<div class="small-6 columns">
+						@prevRun.Item2.ToEnglishString()
+					</div>
+				</div>
+				}
+			</div>
+		</div>
+
+		@* Latest Runs Panel *@
+		<div class ="large-8 small-12 columns">
+			<div class="panel callout radius" id="latestruns">
+				<h4>Latest Runs</h4>
+				<div class="row">
+					<div class="small-4 columns">
+						<strong>Date</strong>
+					</div>
+					<div class="small-4 columns">
+						<strong>Product</strong>
+					</div>
+					<div class="small-4 columns">
+						<strong>Version</strong>
+					</div>
+				</div>
+				@foreach(var lr in Model.LatestTestRuns)
+				{
+				<div class="row">
+					<div class="small-4 columns">
+						@lr.RunDate
+					</div>
+					<div class="small-4 columns">
+						@String.Join(", ", lr.TestRunProducts.Select(trp => trp.Product.Name))
+					</div>
+					<div class="small-4 columns">
+						@String.Join(", ", lr.TestRunProducts.Select(trp => trp.Build))
+					</div>
+				</div>
+				}
+			</div>
+		</div> @* end large-8 small-12 columns *@
+	</div>
+</div>
+
+<div id="myModal" class="reveal-modal small" style="display: none" data-reveal>
+  <h3>Invalid Login</h3>
+  <p>Please attempt to log in again with a valid username and password</p>
+  <a class="close-reveal-modal">&#215;</a>
+</div>

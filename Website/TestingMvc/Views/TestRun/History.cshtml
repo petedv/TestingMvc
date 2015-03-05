@@ -1,0 +1,110 @@
+﻿@model TestingMvc.TestRunHistoryVM
+@using database
+
+<div class="row">
+    <div class="large-12 columns">
+        <h3>Test Run History</h3>
+    </div>
+</div>
+
+@* selection controls *@
+<div class="row">
+	<div class="panel">
+	    <fieldset>
+	        <legend>Search Filters</legend>
+	        @using (@Html.BeginForm("History", "TestRun", FormMethod.Post, new { id="filter_form" }))
+			{
+	        <div class="row">
+	        	<div class="large-4 small-12 columns">
+	        		@Html.LabelFor(m => m.ProductID)
+	        		@Html.DropDownListFor(m => m.ProductID, Model.Products, "Select", new { @class="testrun_filter" })
+	        	</div>
+	            <div class="large-4 small-12 columns end">
+	            	@Html.LabelFor(m => m.Build)
+	            	@Html.DropDownListFor(m => m.Build, Model.Builds, "All", new { @class="testrun_filter" })
+	            </div>
+	        </div>
+			}
+	    </fieldset>
+	</div>
+</div>
+
+@{
+	int count = 0;
+	var rows = Model.TestRunResults
+		.SelectMany(kvp => kvp.Value)
+		.GroupBy(trr => trr.TestCaseID)
+		.ToDictionary(
+			grp => grp.Key,
+			grp => count++
+		);
+	
+	//Make a 2D Array describing the table
+	TestCaseResult[,] resultsTable = new TestCaseResult[Model.TestRuns.Count(), rows.Count()];
+	count = 0;
+	foreach (var tr in Model.TestRuns)
+	{
+		foreach (var trr in Model.TestRunResults[tr.TestRunID])
+		{
+			resultsTable[count, rows[trr.TestCaseID]] = trr;
+		}
+		count += 1;
+	}
+}
+
+@* history table *@
+<div class="row">
+    <table id="history_table">
+    	<tr>
+    		@if (Model.TestRuns.Any())
+    		{
+    		<th>TestCase</th>
+    		}
+    		@* Find each testruns Build and RunDates for each column header. *@
+    		@foreach(var heading in Model.TestRuns)
+    		{
+    			var prod = heading.TestRunProducts.FirstOrDefault(trp => trp.ProductID == Model.ProductID.Value);
+    			if (prod != null)
+    			{
+    				<th>@prod.Build : @heading.RunDate.ToShortDateString()</th>
+    			} else {
+					<th>@heading.RunDate.ToShortDateString()</th>
+    			}
+    		}
+    	</tr>
+		@for(int j = 0; j < resultsTable.GetLength(1); j++)
+		{
+		<tr>
+			@* We need to find any result in this row to get the TestCaseCode *@
+			@{
+				var testcase = "";
+				for(int i = 0; i < resultsTable.GetLength(0); i++)
+				{
+ 					if (resultsTable[i, j] != null)
+ 					{
+ 						testcase = resultsTable[i, j].TestCase.TestCaseCode;
+ 						break;
+ 					}
+				}
+			}
+			<td>@testcase</td>
+			@* Then Write a cell for each testrun for this TestCaseCode *@
+			@for(int i = 0; i < resultsTable.GetLength(0); i++)
+			{
+				if (resultsTable[i, j] != null)
+				{
+					var cls = resultsTable[i,j].Result;
+					<td class="@cls">@resultsTable[i,j].Result</td>
+				} else {
+					<td> - </td>
+				}
+			}
+		</tr>
+		}
+    </table>
+</div>
+
+@section scripts
+{
+	@Scripts.Render("~/Scripts/Views/testrunhistory.js")
+}

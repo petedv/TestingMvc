@@ -1,0 +1,68 @@
+﻿@model TestingMvc.IncompleteTestRunVM
+
+<div class="row">
+	<div class="large-12 columns">
+		<h3>Incomplete Test Runs</h3>
+	</div>
+</div>
+
+@using(@Html.BeginForm("IncompleteRun", "TestRun", FormMethod.Get))
+{
+	@* Selection controls *@
+	<div class="row">
+		<div class="panel">
+			<fieldset>
+				<legend>Search Filters</legend>
+				<div class="row">
+					<div class="large-5 small-12 columns">
+						<label for="ProductID">Product: 
+							@Html.DropDownListFor(m => m.ProductID, Model.Products, "Select", new { id="products", @class="testrunfilter" })
+						</label>
+					</div>
+					<div class="large-5 small-12 columns end">
+						<label for="Build">Build: 
+							@Html.DropDownListFor(m => m.Build, Model.Builds, "All", new { id="builds", @class="testrunfilter" })
+						</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+}
+
+<div class="row">
+	<div class="large-12 columns">
+		<table id="incompletetestruns">
+		@if (Model.TestRuns.Any())
+		{
+			<caption>Incomplete Test Runs</caption>
+			<tr>
+				<th>Computer Name</th>
+				<th>Date Of Test</th>
+				<th>Config</th>
+				<th>Incomplete Cases</th>
+				<th>&nbsp;</th>
+			</tr>
+			foreach (var tup in Model.TestRuns)
+			{
+				<tr>
+					<td>@tup.Item1.ComputerName</td>
+					<td>@tup.Item1.RunDate.ToString("G")</td>
+					<td>@tup.Item1.Config.Name</td>
+					<td>@tup.Item2</td>
+					<td>@Html.ActionLink("Complete", "CompleteRun", new { TestRunID=tup.Item1.TestRunID }, new { @class="button small right" })</td>
+				</tr>
+			}
+		}
+		else if (Model.ProductID.HasValue)
+		{
+			<tr><td>There are no incomplete test runs for this product version</td></tr>
+		}
+		</table>
+	</div>
+</div>
+
+@section scripts
+{
+	@Scripts.Render("~/Scripts/Views/incompleterun.js")
+}

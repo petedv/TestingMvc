@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>TestingWebsite - @ViewBag.Title</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        @Scripts.Render("~/bundles/modernizr")
+        @Styles.Render("~/Content/normalize.css")
+		@Styles.Render("~/Content/foundation.css")
+        @Styles.Render("~/Content/Site.css")
+        @RenderSection("header", required: false)
+    </head>
+    <body>
+    	<header>
+	        <nav class="top-bar" role="navigation" data-topbar>
+			    <ul class="title-area">
+			        <li class="name">
+			        	<h1>@Html.ActionLink("Testing Website", "Index", "Home")</h1>
+			        </li>
+			        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+			    </ul>
+
+			    <section class="top-bar-section">
+			        <!-- Right Nav Section -->
+			        <ul class="right">
+			        	@if (User.IsInRole("test"))
+			        	{
+			        	<li class="has-dropdown">
+			        		<a href="#">Execute Tests</a>
+			        		<ul class="dropdown">
+			        			<li>@Html.ActionLink("Create New Test Run", "StartRun", "TestRun")</li>
+			        			<li>@Html.ActionLink("Complete Unfinished Test Run", "IncompleteRun", "TestRun")</li>
+			        		</ul>
+			        	</li>
+			        	<li class="has-dropdown">
+			        		<a href="#">Test Cases</a>
+			        		<ul class="dropdown">
+			        			<li>@Html.ActionLink("Add Test Case", "AddTest", "TestCase")</li>
+			        			<li>@Html.ActionLink("Edit Test Cases", "FindTest", "TestCase")</li>
+			        		</ul>
+			        	</li>
+						}
+						<li class="has-dropdown">
+			        		<a href="#">Test Results</a>
+			        		<ul class="dropdown">
+			        			<li>@Html.ActionLink("View Test Run", "ViewRun", "TestRun")</li>
+			        			<li>@Html.ActionLink("Test Run History", "History", "TestRun")</li>
+			        		</ul>
+			        	</li>
+						<li><a href="#">Graphs</a></li>
+						@if (User.IsInRole("admin"))
+						{
+			        	<li class="has-dropdown">
+			        		<a href="#">Configuration</a>
+			        		<ul class="dropdown">
+			        			<li>@Html.ActionLink("Add User", "AddUser", "Home")</li>
+			        			<li>@Html.ActionLink("Edit Profile", "EditProfile", "Home")</li>
+			        			<li>@Html.ActionLink("Add Product", "AddProduct", "Product")</li>
+			        			<li>@Html.ActionLink("Edit Product", "EditProduct", "Product")</li>
+			        			<li><a href="#">Integrate Bug Tracker</a></li>
+			        		</ul>
+			        	</li>
+						}
+			        </ul>
+			    </section>
+			</nav>
+		</header>
+
+		<div class="row">
+			<div id="alerts" class="small-8 small-offset-2 columns">
+			</div>
+		</div>
+
+
+        <div id="body">
+        	@RenderBody()
+        </div>
+
+        <footer>
+            <div class="panel">
+                <p>&copy; @DateTime.Now.Year - Company Name</p>
+            </div>
+        </footer>
+
+        @Scripts.Render("~/Scripts/jquery.js")
+        @Scripts.Render("~/Scripts/jquery.cookie.js")
+        @Scripts.Render("~/Scripts/fastclick.js")
+        @Scripts.Render("~/Scripts/foundation.js")
+        @Scripts.Render("~/Scripts/foundation.dropdown.js")
+        @Scripts.Render("~/Scripts/foundation.topbar.js")
+        @Scripts.Render("~/Scripts/foundation.tab.js")
+        @Scripts.Render("~/Scripts/foundation.alert.js")
+        @Scripts.Render("~/Scripts/foundation.accordion.js")
+        @Scripts.Render("~/Scripts/shared.js")
+        <script>
+			$(document).foundation();
+		</script>
+        @RenderSection("scripts", required: false)
+        <script>
+        	window.TestWebsite.Shared.display_alert_cookie();
+        </script>
+    </body>
+</html>

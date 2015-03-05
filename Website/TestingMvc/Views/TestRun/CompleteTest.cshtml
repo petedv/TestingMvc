@@ -1,0 +1,90 @@
+﻿@model TestingMvc.TestCaseResultVM
+@using TestingMvc
+
+<div class="row">
+    <div class="large-12 columns">
+        <h3>@Model.TestCase.TestCaseCode</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="panel">
+        
+        @* requirements area *@
+        <fieldset>
+        	<legend>Requirements</legend>
+        	<div class="large-12 columns">
+        		<span class="newlines">@Model.TestCase.Requirements</span>
+        	</div>
+        </fieldset>
+
+        @* testcase area *@
+        <fieldset>
+        	<legend>Test Case Title</legend>
+        	<div class="large-12 columns">
+        		<span class="newlines">@Model.TestCase.Title</span>
+        	</div>
+        </fieldset>
+
+        @* preconditions area *@
+        <fieldset>
+        	<legend>Preconditions</legend>
+        	<div class="large-12 columns">
+        		<span class="newlines">@Model.TestCase.Preconditions</span>
+        	</div>
+        </fieldset>
+
+        @* steps area *@
+        <fieldset>
+        	<legend>Inputs / Steps</legend>
+        	<div class="large-12 columns">
+        		<span class="newlines">@Model.TestCase.Steps</span>
+        	</div>
+        </fieldset>
+
+        @* expected area *@
+        <fieldset>
+        	<legend>Test Case Title</legend>
+        	<div class="large-12 columns">
+        		<span class="newlines">@Model.TestCase.Title</span>
+        	</div>
+        </fieldset>
+
+        @* coments area *@
+        <fieldset>
+        	<legend>Expected Outcome</legend>
+        	<div class="large-12 columns">
+        		<span class="newlines">@Model.TestCase.Expected</span>
+        	</div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Comments and Results</legend>
+            <div class="row">
+            	@using (@Html.BeginForm("CompleteTest", "TestRun", FormMethod.Post))
+				{
+					@Html.HiddenFor(m => m.TestRunID)
+					@Html.HiddenFor(m => m.TestCaseID)
+	                <div class="large-11 medium-10 columns">
+	                	@Html.TextAreaFor(m => m.Comments, new { rows="3" })
+	                </div>
+	                <div class="large-1 medium-2 columns">
+	                    <div class ="row">
+	                        <div class="large-12 columns">
+	                            <ul class="stack button-group">
+	                              <li><a href="#" class="button small" id="btn_pass">Pass</a></li>
+	                              <li><a href="#" class="button small" id="btn_fail">Fail</a></li>
+	                            </ul>
+	                        </div>
+	                    </div>
+	                </div>
+                }
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+@section scripts
+{
+	@Scripts.Render("~/Scripts/Views/completetest.js")
+}

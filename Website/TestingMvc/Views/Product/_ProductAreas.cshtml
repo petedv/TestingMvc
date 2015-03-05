@@ -1,0 +1,60 @@
+﻿@model TestingMvc.ProductAreasVM
+
+
+<div class ="row">
+	@using (@Html.BeginForm("AddArea", "Product", FormMethod.Post))
+	{
+	@Html.HiddenFor(m => m.ProductID)
+	<div class="small-4 columns">
+	    <fieldset style="margin-bottom:1.5em; padding-bottom:0em;">
+	        <legend>Add Area</legend>
+	        <div class="row">
+	            <div class="small-12 columns">
+	                <label>Functional Area Name
+	                	@Html.TextBoxFor(m => m.Name)
+	                </label>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="small-12 columns">
+	                <label>Area Description
+	                	@Html.TextAreaFor(m => m.Description, new { rows="3" })
+	                </label>
+	            </div>
+	        </div>
+	        <div class="row">
+	            <div class="small-12 columns">
+	            	<input type="submit" class="button small right" id="btnAddArea" value="Add" />
+	            </div>
+	        </div>
+	    </fieldset>
+	</div>
+	}
+	<div class="small-8 columns">
+	    <fieldset>
+	        <legend>Current Areas</legend>
+	        <table>
+	        	<tr>
+	        		<th>Area Name</th>
+	        		<th>Description</th>
+	        		<th>&nbsp;</th>
+	        	</tr>
+				@foreach (var a in Model.ExistingAreas)
+				{
+				<tr>
+					<td>@a.Name</td>
+					<td>@a.Description</td>
+					<td>
+						@using (@Html.BeginForm("DeleteArea", "Product", FormMethod.Post, new { @class="deleteAreaForm" }))
+						{
+							@Html.Hidden("areaID", a.AreaID);
+							<input type="submit" class="small button right" value="Delete" />
+						}
+					</td>
+				</tr>
+				}
+	        </table>
+	    </fieldset>
+	</div>
+</div>
+

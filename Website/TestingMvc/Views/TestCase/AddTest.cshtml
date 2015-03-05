@@ -1,0 +1,20 @@
+﻿@model TestingMvc.TestCaseVM
+@{
+    ViewBag.Title = "Add Test";
+	ViewBag.Button = "Add";
+	ViewBag.FormAction = "AddTest";
+	ViewBag.FormController = "TestCase";
+}
+
+@Html.Partial("_TestCaseForm", Model)
+
+@section scripts 
+{
+	@Scripts.Render("~/Scripts/Views/testcaseform.js")
+    <script>
+    	@* On document load, add some event handlers *@
+    	$(function() {
+			window.TestWebsite.TestCase.AddTest.add_handlers();
+		});
+	</script>
+}

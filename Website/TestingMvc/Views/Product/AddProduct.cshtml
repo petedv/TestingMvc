@@ -1,0 +1,41 @@
+﻿@model TestingMvc.GenericModel
+
+@{
+    ViewBag.Title = "Add Product";
+}
+
+<div class="row">
+    <div class="small-12 columns">
+        <h3>Add Product</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="panel" style="padding-bottom:0em;">
+    	@using (@Html.BeginForm("AddProduct", "Product", FormMethod.Post, new { 
+			id="productform", 
+		})) {
+
+        <div class="row">
+            <div class="small-4 columns end">
+                <label>Product Name
+                	@Html.TextBoxFor(m => m.Name, new { id="productname" })
+                </label>
+            </div>
+        </div>
+
+        <div class ="row">
+            <div class="small-12 columns" style="padding-top:1em;">
+            	<input type="submit" id="addproduct" class="button small right" value="Add Product" />
+            </div>
+        </div>
+		}
+    </div>
+
+    @if (Model.HasError)
+    {
+    <div class="panel">
+    	<p>@Model.Error</p>
+    </div>
+    }
+</div>

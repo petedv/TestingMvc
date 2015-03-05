@@ -1,0 +1,63 @@
+﻿
+input[type="text"],
+textarea {
+	overflow: auto; 
+	resize: none;
+}
+
+#alerts {
+	margin-top: 1em;
+}
+/*
+ *	Stops \n characters from being ignored in html.
+ */
+.newlines {
+	white-space: pre-line;
+}
+/*
+ *	Test Cases Colours
+ */
+.PASSED {
+	background-color: #66CC44;
+}
+.FAILED {
+	background-color: #CC6644;
+}
+
+/*
+ *	General Site Styles
+ */
+.small-panel {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #d8d8d8;
+	margin-bottom: 1.25rem;
+	padding: 0.6rem;
+	background: #ffffff; 
+}
+.small-panel.nobottom {
+	margin-bottom: 0;
+}
+/*
+ *	Index Page Css
+ */
+#dashboard .callout {
+	margin: 1em; 
+}
+#newesttestcases .columns,
+#previoustestruns .columns,
+#latestruns .columns {
+	border:1px solid #d1d5d1;
+}
+	 
+
+/*
+ *	Adds some borders inside the accordion on the test run results page.
+ */
+.accordion .accordion-navigation > .bordered, 
+.accordion dd > .bordered {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #d8d8d8;
+	border-top: none;
+}

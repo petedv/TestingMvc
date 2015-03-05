@@ -1,0 +1,54 @@
+﻿@model TestingMvc.TestCaseSearchVM
+
+@{
+    ViewBag.Title = "Add Test";
+}
+
+<div class="row">
+	<div class="small-12 columns">
+		<h3>Edit Test Case</h3>
+	</div>
+</div>
+
+@Html.Partial("_TestCaseSearch", Model)
+
+@* test case table *@
+<div class="panel">
+	<table id="testtable">
+		<tr>
+			<th>Code</th>
+			<th>Title</th>
+			<th>Preconditions</th>
+			<th>Steps</th>
+			<th>Expected</th>
+			<th>Edit</th>
+		</tr>
+		@foreach (database.TestCase tc in Model.MatchingTestCases) {
+		<text>
+			<tr>
+				<td>@tc.TestCaseCode</td>
+				<td>@tc.Title</td>
+				<td>@tc.Preconditions</td>
+				<td>@tc.Steps</td>
+				<td>@tc.Expected</td>
+				<td><a class="button small" href="@Url.Action("EditTest", new { TestCaseID = tc.TestCaseID })">Edit</a></td>
+			</tr>
+		</text>
+		}
+		@if (!Model.MatchingTestCases.Any()) {
+		<tr>
+			<td> - </td>
+			<td> - </td>
+			<td> - </td>
+			<td> - </td>
+			<td> - </td>
+			<td> - </td>
+		</tr>
+		}
+	</table>
+</div>
+
+@section scripts {
+	@Scripts.Render("~/Scripts/Views/testcasesearch.js")
+}
+

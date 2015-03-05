@@ -1,0 +1,96 @@
+﻿@model TestingMvc.ConfigValuesVM
+@using TestingMvc
+
+@using (Html.BeginForm("AddConfigValues", "Product", FormMethod.Post, new { 
+	id="addConfigValuesForm"
+})) 
+{
+	@Html.Hidden("productID", Model.ProductID)
+
+	<fieldset>
+	    <legend>Add New Configuration</legend>
+	    <div class="row">
+	        <div class="small-12 large-4 columns">
+	        	<label>ConfigName
+	        		@Html.TextBox("configName")
+	        	</label>
+	    	</div>
+		</div>
+	    <div class="row">
+	        <div class="small-12 columns">
+
+	        	@foreach (var row in Model.ConfigFields.Chunks(3))
+	        	{
+	        		<div class="row configvaluerow">
+	        			@foreach (var field in row)
+	        			{
+	        			<div class="configvaluecell small-4 columns end">
+							<label>@field.Key
+								@if (field.Value.Equals("Boolean", StringComparison.OrdinalIgnoreCase))
+								{
+									<select data-tooltip aria-haspopup="true" class="has-tip" title="Boolean Required" name="values[@field.Key]">
+										<option>True</option>
+										<option>False</option>
+									</select>
+								}
+								else
+								{
+									if (field.Value.Equals("Numeric", StringComparison.OrdinalIgnoreCase))
+									{
+										<input type="text" value="" name="values[@field.Key]" data-tooltip aria-haspopup="true" class="has-tip" title="Numeric Required"/>
+									}
+									else
+									{
+										<input type="text" value="" name="values[@field.Key]" data-tooltip aria-haspopup="true" class="has-tip" title="Alphanumeric Required"/>
+									}
+								}
+							</label>
+						</div>
+	        			}
+	        		</div>
+	        	}
+	        	<input type="submit" class="button small right" value="Add" />
+	        </div>
+	    </div>
+	</fieldset>
+}
+@{
+	var fieldCols = Model.ConfigFields.Keys
+		.Select((s, i) => new {index=i, str=s})
+		.ToDictionary(a => a.str, a => a.index);
+}
+
+<fieldset>
+    <legend>Current Configurations</legend>
+    @if (fieldCols.Any())
+    {
+    <table>
+    	<tr>
+    		<td>Config</td>
+    		@foreach (var key in Model.ConfigFields.Keys)
+    		{
+    		<td>@key</td>
+    		}
+    	</tr>
+		@* for each (Item1:ConfigID, Item2:RelatedConfigValues) *@
+		@foreach (var tup in Model.ExistingConfigs)
+		{
+			<tr data-for="@tup.Item1">
+				<td>@tup.Item2.First().Config.Name</td>
+				@{
+					var row = new string[fieldCols.Count];
+				}
+				@foreach (var cv in tup.Item2)
+				{
+					row[fieldCols[cv.ConfigField.FieldName]] = cv.Value;
+				}
+				@foreach (var s in row.Select(s => s ?? ""))
+				{
+					<td>@s</td>
+				}
+			</tr>
+		}
+    </table>
+    }
+</fieldset>
+

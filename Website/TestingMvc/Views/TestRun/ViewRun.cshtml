@@ -1,0 +1,161 @@
+﻿@model TestingMvc.ViewTestRunVm
+
+<div class="row">
+	<div class="large-12 columns">
+		<h3>Test Run</h3>
+	</div>
+</div>
+
+@* Test Run Filters *@
+@using(@Html.BeginForm("ViewRun", "TestRun", FormMethod.Post, new { id="testrunform" }))
+{
+	<div class="row">
+		<div class="large-4 columns">
+			@Html.LabelFor(m => m.ProductID)
+			@Html.DropDownListFor(m => m.ProductID, Model.ProductOptions, "Select", new { @class="testrun_filter" })
+		</div>
+		<div class="large-4 columns">
+			@Html.LabelFor(m => m.Build)
+			@Html.DropDownListFor(m => m.Build, Model.BuildOptions, "All", new { @class="testrun_filter" })
+		</div>
+		<div class="large-4 columns">
+			@Html.LabelFor(m => m.TestRunID)
+			@Html.DropDownListFor(m => m.TestRunID, Model.TestRunOptions, "All", new { @class="testrun_filter" })
+		</div>
+	</div>
+}
+
+<hr>
+
+<div id="testrundetails">
+@if (Model.TestRun != null)
+{
+	@* Test Environment *@
+	<div class="row">
+		<div class="large-12 columns">
+			<div class="panel">
+				<strong>Configuration for test executed on @Model.TestRun.RunDate.ToString("G")</strong>
+				<div class="row">
+					<div class="large-3 small-6 columns">
+						<strong>Computer Name</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.ComputerName
+					</div>
+					<div class="large-3 small-6 columns">
+						<strong>Operating System</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.OS
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-3 small-6 columns">
+						<strong>System Language</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.Language
+					</div>
+					<div class="large-3 small-6 columns">
+						<strong>CPU Speed</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.CpuSpeed
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-3 small-6 columns">
+						<strong>Total Physical Memory</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.TotalPhysicalMemory
+					</div>
+					<div class="large-3 small-6 columns">
+						<strong>Available Physical Memory</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.AvailablePhysicalMemory
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-3 small-6 columns">
+						<strong>Total Virtual Memory</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.TotalVirtualMemory
+					</div>
+					<div class="large-3 small-6 columns">
+						<strong>Available Virtual Memory</strong>
+					</div>
+					<div class="large-3 small-6 columns">
+						@Model.TestRun.AvailableVirtualMemory
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@* Test Results *@
+	<div class="row">
+		<div class="large-12 columns">
+			<h4>Functional Areas</h4>
+			<dl class="accordion" data-accordion>
+				<dd class="accordion-navigation">
+
+					<div class="panel nobottom"> @* panlink *@
+						<div class="row"> @* panrow *@
+							<div class="large-8 columns"> @* panoutcome *@
+								Test Outcome
+							</div>
+							<div class="large-2 columns"> @* panpassrate *@
+								Pass Rate
+							</div>
+							<div class="large-2 columns"> @* pancomprate *@
+								Completion Rate
+							</div>
+						</div>
+					</div>
+
+				</dd>
+
+				@foreach (var grp in Model.Results)
+				{
+					var tup = Model.AreaResults[grp.Key.AreaID];
+					<dd class="accordion-navigation">
+						<a href="#area-@grp.Key.AreaID">@grp.Key.Name</a>
+						<div class="small-panel nobottom">
+							<div class="row">
+								<div class="large-8 columns">
+									@tup.Item1
+								</div>
+								<div class="large-2 columns">
+									@tup.Item2
+								</div>
+								<div class="large-2 columns">
+									@tup.Item3
+								</div>
+							</div>
+						</div>
+						<div id="area-@grp.Key.AreaID" class="content bordered">
+							<table>
+							@foreach (var tc in grp)
+							{
+								<tr>
+									<td>@tc.TestCase.TestCaseCode</td>
+									<td class="@tc.Result">@tc.Result</td>
+								</tr>
+							}
+							</table>
+						</div>
+					</dd>
+				}
+			</dl>
+		</div>
+	</div>
+}
+</div>
+
+@section scripts
+{
+	@Scripts.Render("~/Scripts/Views/viewrun.js")
+}

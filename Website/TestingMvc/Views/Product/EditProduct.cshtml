@@ -1,0 +1,100 @@
+﻿@model TestingMvc.EditProductVM
+
+@{
+    ViewBag.Title = "Edit Product";
+}
+
+<div class="row">
+    <div class="small-12 columns">
+        <h3>Edit Product</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="panel">
+    	
+        <div class="row" style="margin-bottom:1.5em;">
+            <div class=" small-4 end columns">
+            	@using (Html.BeginForm("EditProduct", "Product", FormMethod.Get, new { 
+					id="selectProductForm"
+				})) {
+                <label>Product
+                    @Html.DropDownListFor(m => m.ProductID, Model.AllProducts, "Select", new { id="productlist" })
+                </label>
+				}
+            </div>
+        </div>
+        @if (Model.ProductID > 0)
+        {
+        <div class="row">
+        	@{ 
+        		string tab1Active = Model.SelectedTab == TestingMvc.ProductTabs.ConfigFields ? "active" : ""; 
+        		string tab2Active = Model.SelectedTab == TestingMvc.ProductTabs.ConfigValues ? "active" : ""; 
+        		string tab3Active = Model.SelectedTab == TestingMvc.ProductTabs.Areas ? "active" : ""; 
+        		string content1Class = Model.SelectedTab == TestingMvc.ProductTabs.ConfigFields ? "content active" : "content";
+        		string content2Class = Model.SelectedTab == TestingMvc.ProductTabs.ConfigValues ? "content active" : "content";
+        		string content3Class = Model.SelectedTab == TestingMvc.ProductTabs.Areas ? "content active" : "content";
+        	}
+        	@* The Tab Names *@
+            <dl class="tabs" data-tab>
+                <dd class="@tab1Active"><a href="#panel1">Product Details</a></dd>
+                <dd class="@tab2Active"><a href="#panel2">Configurations</a></dd>
+                <dd class="@tab3Active"><a href="#panel3">Functional Areas</a></dd>
+            </dl>
+                
+            <div class="tabs-content">
+
+            	@*PRODUCT DETAILS TAB : used to add config properties,change the product name or delete the product *@
+                <div class="@content1Class" id="panel1">
+                	@* Edit Product Name Field *@
+				    <div class="row">
+				        <div class="small-4 columns end">
+				            <label>Product Name
+				                @Html.TextBoxFor(m => m.ProductName, new { id="txtproductname" })
+				            </label>
+				        </div>
+				    </div>
+					@* Add/Remove Config Fields *@
+				    <div id="configfieldscontent">
+				    	@Html.Partial("_ConfigFields", Model.ConfigFieldsModel)
+				    </div>
+					@* Delete Product Button *@
+					<div class="row">
+					    <div class="small-12 columns" style="padding-top: 1em;">
+					        <ul class="button-group right">
+					        	<a href="#" class="button small" id="btn_deleteProduct">Delete Product</a>
+					        </ul>
+					    </div>
+					</div>
+                </div>
+
+                @* CONFIGURATIONS TAB  *@
+                <div class="@content2Class" id="panel2">
+                	@Html.Partial("_ConfigValues", Model.ConfigValuesModel)
+                </div>
+
+                @* FUNCTIONAL AREAS TAB : used to create product areas *@
+                <div class="@content3Class" id="panel3">
+                    @Html.Partial("_ProductAreas", Model.ProductAreasModel)
+                </div>
+            </div>
+        </div>
+		}
+    </div>
+</div>
+
+@section scripts 
+{
+    @Scripts.Render("~/Scripts/Views/configfields.js")
+    <script>
+    	@* On document load, add some event handlers *@
+    	$(function() {
+    		@* On selecting an item in the product list, reload the page. *@
+    		$("#productlist").change(function() {
+    			$("#selectProductForm").submit();
+    		});
+
+    		window.TestWebsite.Product.ConfigFields.add_handlers();
+    	});
+    </script>
+}

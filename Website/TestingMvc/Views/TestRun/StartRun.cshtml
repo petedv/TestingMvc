@@ -1,0 +1,102 @@
+﻿@model TestingMvc.TestRunVM
+@using (@Html.BeginForm("StartRun", "TestRun", FormMethod.Post))
+{
+	<div class="row">
+		<div class="large-12 columns">
+			<h3>Create New Test Run</h3>
+		</div>
+	</div>
+
+	@* selection controls *@
+	<div class="row">
+		<div class="panel">
+			<fieldset>
+				<legend>Run Details</legend>
+
+				<div class="row">
+					<div class="large-4 small-12 columns">
+						<label>
+							Product
+							@Html.DropDownListFor(m => m.ProductID, Model.ProductOptions, "Select", new { id="productSelect" })
+							@Html.ValidationMessageFor(m => m.ProductID, null, new { @class="error" })
+						</label>
+					</div>
+					<div class="large-4 small-12 columns end">
+						<label>
+							Build
+							@Html.TextBoxFor(m => m.Build)
+							@Html.ValidationMessageFor(m => m.Build, null, new { @class="error" })
+						</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="large-4 small-12 columns">
+						<label>Computer Name
+							@Html.TextBoxFor(m => m.ComputerName)
+							@Html.ValidationMessageFor(m => m.ComputerName, null, new { @class="error" })
+						</label>
+					</div>
+					<div class="large-4 small-12 columns">
+						<label>OS
+							@Html.TextBoxFor(m => m.OS)
+							@Html.ValidationMessageFor(m => m.OS, null, new { @class="error" })
+						</label>
+					</div>
+					<div class="large-4 small-12 columns end">
+						<label>Language
+							@Html.TextBoxFor(m => m.Language)
+							@Html.ValidationMessageFor(m => m.Language, null, new { @class="error" })
+						</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="large-12 small-12 columns">
+						<label>Run Comments
+							@Html.TextAreaFor(m => m.RunComments, new { rows="3" }) 
+							@Html.ValidationMessageFor(m => m.RunComments, null, new { @class="error" })
+						</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="large-12 columns">
+						<label>Config
+							@Html.ValidationMessageFor(m => m.ConfigID, null, new { @class="error" })
+						</label>
+						<table id="ConfigsTable">
+						@foreach (var tup in Model.ConfigOptions)
+						{
+							<tr>
+								<td>
+									<input type="radio" name="ConfigID" value="@tup.Item1" />
+									@tup.Item2.First().Config.Name
+								</td>
+								<td>
+									@{
+										var s = String.Join("; ", @tup.Item2.Select(cv => cv.ConfigField.FieldName + "=" + cv.Value));
+									}
+									<span>@s</span>
+								</td>
+							</tr>
+						}
+						</table>
+					</div>
+				</div>
+
+			</fieldset>
+
+			<div class="row">
+				<div class="large-12 columns" style="padding-top:1em; padding-bottom:0em">
+					<input type="submit" class="button small right" value="Start" />
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@section scripts
+{
+	@Scripts.Render("~/Scripts/Views/starttestrun.js")
+}
