@@ -14,3 +14,21 @@ To run the website.
 2. Edit the Web.Config file with the new connection details.
 3. Run the project in Mono Develop or Visual Studio.
 4. Manually call the /Home/AddAdminUser which will add a new User "Admin". (See Home controller for details).
+
+
+Database - Nuget Packages Required:
+Entity Framework 6.0
+Npgsql 2.2.3
+Npgsql.EntityFramework 2.2.3
+
+TestingMvc - Nuget Packages Required:
+Entity Framework 6.0
+Npgsql 2.2.3
+Npgsql.EntityFramework 2.2.3
+NauckIT.PostgreSQLProvider 2.0.0
+Microsoft.AspNet.Mvc 4.0.2
+Microsoft.AspNet.Razor 2.0
+Microsoft.AspNet.WebApi 4.0
+Microsoft.AspNet.WebPages 2.0
+Microsoft.Net.Http 2.0
+Microsoft.Web.Infrastructure 2.0
