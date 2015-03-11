@@ -1,4 +1,5 @@
 ﻿@model TestingMvc.UserVM
+@using TestingMvc
 
 <div class ="row">
 	<div class ="large-12 columns">
@@ -11,32 +12,32 @@
 	<div class="panel">
 		<div class="row">
 			<div class="large-5 large-centered columns end">
-				@Html.LabelFor(m => m.Username)
-				@Html.TextBoxFor(m => m.Username)
+				@Html.LabelFor(m => m.Username, new { @class=Html.ClassIfInvalidField(m => m.Username, "error") })
+				@Html.TextBoxFor(m => m.Username, new { @class=Html.ClassIfInvalidField(m => m.Username, "error") })
 				@Html.ValidationMessageFor(m => m.Username, null, new { @class="error" })
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="large-5 large-centered columns end">
-				@Html.LabelFor(m => m.NewPassword)
-				@Html.PasswordFor(m => m.NewPassword)
+				@Html.LabelFor(m => m.NewPassword, new { @class=Html.ClassIfInvalidField(m => m.NewPassword, "error") })
+				@Html.PasswordFor(m => m.NewPassword, new { @class=Html.ClassIfInvalidField(m => m.NewPassword, "error") })
 				@Html.ValidationMessageFor(m => m.NewPassword, null, new { @class="error" })
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="large-5 large-centered columns end">
-				@Html.LabelFor(m => m.NewPasswordAgain)
-				@Html.PasswordFor(m => m.NewPasswordAgain)
+				@Html.LabelFor(m => m.NewPasswordAgain, new { @class=Html.ClassIfInvalidField(m => m.NewPasswordAgain, "error") })
+				@Html.PasswordFor(m => m.NewPasswordAgain, new { @class=Html.ClassIfInvalidField(m => m.NewPasswordAgain, "error") })
 				@Html.ValidationMessageFor(m => m.NewPasswordAgain, null, new { @class="error" })
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="large-5 large-centered columns end">
-				@Html.LabelFor(m => m.Email)
-				@Html.TextBoxFor(m => m.Email)
+				@Html.LabelFor(m => m.Email, new { @class=Html.ClassIfInvalidField(m => m.Email, "error") })
+				@Html.TextBoxFor(m => m.Email, new { @class=Html.ClassIfInvalidField(m => m.Email, "error") })
 				@Html.ValidationMessageFor(m => m.Email, null, new { @class="error" })
 			</div>
 		</div>
@@ -44,13 +45,14 @@
 		@* Roles *@
 		<div class="row">
 			<div class="large-5 large-centered columns end">
-				<label for="UserRoles">Roles</label>
-				<div class="panel">
+				<label for="UserRoles" class='@Html.ClassIfInvalidField(m => m.UserRoles, "error")'>Roles</label>
+				<div class='panel @Html.ClassIfInvalidField(m => m.UserRoles, "error")'>
 					@foreach (var r in Model.RoleOptions)
 					{
 						<input type="checkbox" value="@r" name="UserRoles" /> @r <br />
 					}
 				</div>
+				@Html.ValidationMessageFor(m => m.UserRoles, null, new { @class="error" })
 			</div>
 		</div>
 

@@ -38,6 +38,10 @@ textarea {
 .small-panel.nobottom {
 	margin-bottom: 0;
 }
+.panel.error
+{
+	margin-bottom: 0;
+}
 /*
  *	Index Page Css
  */
