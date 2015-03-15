@@ -16,43 +16,42 @@ namespace TestingMvc.Controllers
 			db = new database.TestingContext ();
 		}
 
-		[HttpGet, Authorize(Roles="test")]
-		public ActionResult AddProduct()
-		{
-			return View("AddProduct", new GenericModel());
-		}
-
 		[HttpPost, Authorize(Roles="test")]
-		public ActionResult AddProduct(GenericModel productInfo)
+		public ActionResult AddProduct(ProductVM vm)
 		{
-			if(db.Products.Where(p => p.Name.ToLower() == productInfo.Name.ToLower()).Any())
+			//TODO broken here maybe. Needs to only look at name.
+			if (Request.HttpMethod == "POST")
 			{
-				productInfo.Error = "Product Already Exists";
-			} 
-			else 
-			{
-				try
+				if(ModelState.IsValid && vm.DbValidation(db, ModelState))
 				{
-					var newProduct = new database.Product();
-					newProduct.Name = productInfo.Name;
-					db.Products.Add(newProduct);
-					db.SaveChanges();
+					try
+					{
+						var newProduct = new database.Product();
+						newProduct.Name = vm.ProductName;
+						db.Products.Add(newProduct);
+						db.SaveChanges();
 
-					return RedirectToAction("EditProduct", new {
-						ProductID=newProduct.ProductID, 
-						SelectedTab=ProductTabs.ConfigFields
-					});
+						return RedirectToAction("EditProduct", new {
+							ProductID=newProduct.ProductID, 
+							SelectedTab=ProductTabs.ConfigFields
+						});
+					}
+					catch (Exception ex)
+					{
+						Response.AppendCookie(new HttpCookie("FlashMessage", "error|Error Adding Product") {
+							Expires = DateTime.Now.AddMinutes(1)
+						});
+					}
 				}
-				catch (Exception ex)
-				{
-					productInfo.Error = ex.ToString();
-				}
+			} else {
+				ModelState.Clear();
 			}
-			return View("AddProduct", productInfo);
+			vm.UpdateFromDB(db);
+			return View("AddProduct", vm);
 		}
 
 		[Authorize(Roles="test")]
-		public ActionResult EditProduct(EditProductVM vm)
+		public ActionResult EditProduct(ProductVM vm)
 		{
 			vm.UpdateFromDB(db);
 			return View(vm);
@@ -84,7 +83,7 @@ namespace TestingMvc.Controllers
 				}
 			}
 			vm.UpdateConfigFields(db, vm.ProductID);
-			var editVm = new EditProductVM(db, vm.ProductID, ProductTabs.ConfigFields);
+			var editVm = new ProductVM(db, vm.ProductID, ProductTabs.ConfigFields);
 			editVm.ConfigFieldsModel = vm;
 			return View("EditProduct", editVm);
 		}
@@ -151,7 +150,7 @@ namespace TestingMvc.Controllers
 				db.SaveChanges();
 			}
 			//var vm = new ConfigFieldVM(db, productID);
-			return View("EditProduct", new EditProductVM(db, productID, ProductTabs.ConfigValues));
+			return View("EditProduct", new ProductVM(db, productID, ProductTabs.ConfigValues));
 		}
 
 		[HttpPost, Authorize(Roles="test")]
@@ -169,7 +168,7 @@ namespace TestingMvc.Controllers
 			}
 			else
 			{
-				EditProductVM newModel = new EditProductVM(db, vm.ProductID, ProductTabs.Areas);
+				ProductVM newModel = new ProductVM(db, vm.ProductID, ProductTabs.Areas);
 				newModel.ProductAreasModel = vm;
 				return View("EditProduct", newModel);
 			}
@@ -190,7 +189,7 @@ namespace TestingMvc.Controllers
 				db.Areas.Remove(area);
 				db.SaveChanges();
 			}
-			return View("EditProduct", new EditProductVM(db, productID, ProductTabs.Areas));
+			return View("EditProduct", new ProductVM(db, productID, ProductTabs.Areas));
 		}
 
 		protected override void Dispose(bool disposing)

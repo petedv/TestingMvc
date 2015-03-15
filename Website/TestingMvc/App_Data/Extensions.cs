@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Web.Mvc;
+using System.Web.Mvc.Html;
 
 namespace TestingMvc
 {
@@ -81,6 +84,16 @@ namespace TestingMvc
 			{
 				return _expr.Invoke(obj).GetHashCode();
 			}
+		}
+
+		public static MvcHtmlString ClassIfInvalidField<TModel, TProperty>(
+			this HtmlHelper<TModel> htmlHelper, 
+			Expression<Func<TModel, TProperty>> expression,
+			string errorClassName)
+		{
+			var expressionText = ExpressionHelper.GetExpressionText(expression);
+			var fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
+			return htmlHelper.ViewData.ModelState.IsValidField(fullHtmlFieldName) ? MvcHtmlString.Empty : new MvcHtmlString(errorClassName);
 		}
 	}
 }

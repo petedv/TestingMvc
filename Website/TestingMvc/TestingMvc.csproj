@@ -139,7 +139,6 @@
     <Compile Include="Models\TestCase\TestCaseVM.cs" />
     <Compile Include="Models\Product\ConfigFieldVM.cs" />
     <Compile Include="Models\Product\ConfigValuesVM.cs" />
-    <Compile Include="Models\Product\EditProductVM.cs" />
     <Compile Include="Models\Product\ProductAreasVM.cs" />
     <Compile Include="Models\TestRun\TestRunHistoryVM.cs" />
     <Compile Include="Models\TestRun\ViewTestRunVm.cs" />
@@ -147,6 +146,7 @@
     <Compile Include="Models\HomeVM.cs" />
     <Compile Include="Models\LoginVM.cs" />
     <Compile Include="Models\UserVM.cs" />
+    <Compile Include="Models\Product\ProductVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
