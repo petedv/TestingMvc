@@ -1,13 +1,12 @@
-﻿<Properties>
+﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="TestingMvc/Views/Home/AddUser.cshtml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="TestingMvc/Controllers/ProductController.cs">
     <Files>
-      <File FileName="../trent testing/AddUser.aspx" Line="1" Column="1" />
-      <File FileName="TestingMvc/Models/UserVM.cs" Line="40" Column="40" />
-      <File FileName="TestingMvc/Models/TestRun/TestRunVM.cs" Line="3" Column="3" />
-      <File FileName="TestingMvc/Views/Home/AddUser.cshtml" Line="21" Column="21" />
-      <File FileName="TestingMvc/Controllers/HomeController.cs" Line="68" Column="68" />
-      <File FileName="TestingMvc/Web.config" Line="3" Column="3" />
+      <File FileName="TestingMvc/Controllers/ProductController.cs" Line="57" Column="57" />
+      <File FileName="TestingMvc/Controllers/HomeController.cs" Line="34" Column="34" />
+      <File FileName="TestingMvc/Models/TestRun/TestRunVM.cs" Line="4" Column="4" />
+      <File FileName="TestingMvc/Models/Product/ProductVM.cs" Line="10" Column="10" />
+      <File FileName="TestingMvc/Models/TestRun/CompleteRunVM.cs" Line="4" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

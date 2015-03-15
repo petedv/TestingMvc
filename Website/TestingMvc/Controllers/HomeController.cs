@@ -114,11 +114,17 @@ namespace TestingMvc
 		/// <returns>The admin user.</returns>
 		public ActionResult AddAdminUser()
 		{
-			var admin = Membership.GetUser("Admin");
+			var admin = Membership.GetUser("admin");
 			if (admin == null)
 			{
-				Membership.CreateUser("Admin", "admin", "admin@testingmvc.com");
-				Response.AppendCookie(new HttpCookie("FlashMessage", "Admin user added.") {
+				Membership.CreateUser("admin", "admin", "admin@testingmvc.com");
+				if (!Roles.GetAllRoles().Any())
+				{
+					Roles.CreateRole("admin");
+					Roles.CreateRole("test");
+				}
+				Roles.AddUserToRoles("admin", Roles.GetAllRoles());
+				Response.AppendCookie(new HttpCookie("FlashMessage", "'admin' user added.") {
 					Expires = DateTime.Now.AddMinutes(1)
 				});
 			}
